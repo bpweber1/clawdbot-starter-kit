@@ -4,6 +4,7 @@
 
 const TOTAL_STEPS = 5;
 let currentStep = 1;
+let authMode = 'api'; // 'api' or 'max'
 
 const VIBE_MAP = {
   professional: {
@@ -23,9 +24,6 @@ const VIBE_MAP = {
     short: "Creative & energetic"
   }
 };
-
-// Track current auth mode
-let currentAuthMode = 'api';
 
 // ============================================================================
 // Step Navigation
@@ -49,6 +47,8 @@ function showStep(n) {
   currentStep = n;
   updateProgress();
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Re-init Lucide icons for newly visible elements
+  if (window.lucide) lucide.createIcons();
 }
 
 function nextStep() {
@@ -88,18 +88,18 @@ function toggleAll(checkbox) {
 }
 
 // ============================================================================
-// Auth Toggle (API Key / Claude Max)
+// Auth Mode Toggle
 // ============================================================================
 
 function switchAuth(mode) {
-  currentAuthMode = mode;
-
-  // Update tab active states
+  authMode = mode;
+  
+  // Toggle tab active states
   document.querySelectorAll('.auth-tab').forEach(tab => {
     tab.classList.toggle('active', tab.dataset.auth === mode);
   });
-
-  // Show/hide panels
+  
+  // Toggle panel visibility
   document.getElementById('authApi').classList.toggle('active', mode === 'api');
   document.getElementById('authMax').classList.toggle('active', mode === 'max');
 }
@@ -110,12 +110,14 @@ function switchAuth(mode) {
 
 function toggleAdditionalKeys() {
   const panel = document.getElementById('additionalKeysPanel');
-  const isHidden = panel.style.display === 'none';
-  panel.style.display = isHidden ? 'flex' : 'none';
-
-  // Re-initialize icons if panel just became visible
-  if (isHidden && typeof lucide !== 'undefined') {
-    lucide.createIcons();
+  const btn = panel.previousElementSibling || document.querySelector('.expand-btn');
+  
+  if (panel.style.display === 'none') {
+    panel.style.display = 'flex';
+    // Re-init Lucide for any new icons
+    if (window.lucide) lucide.createIcons();
+  } else {
+    panel.style.display = 'none';
   }
 }
 
@@ -134,29 +136,7 @@ function buildConfig() {
     .map(cb => cb.value)
     .join(',') || 'C';
 
-  // Build integrations based on auth mode
-  const integrations = {
-    telegram: document.getElementById('telegramToken').value.trim()
-  };
-
-  if (currentAuthMode === 'api') {
-    integrations.anthropic = document.getElementById('anthropicKey').value.trim();
-    integrations.authMode = 'api';
-  } else {
-    integrations.claudeMaxToken = document.getElementById('claudeMaxToken').value.trim();
-    integrations.authMode = 'max';
-  }
-
-  // Additional keys
-  const openaiKey = document.getElementById('openaiKey').value.trim();
-  const elevenlabsKey = document.getElementById('elevenlabsKey').value.trim();
-  const braveKey = document.getElementById('braveKey').value.trim();
-
-  if (openaiKey) integrations.openai = openaiKey;
-  if (elevenlabsKey) integrations.elevenlabs = elevenlabsKey;
-  if (braveKey) integrations.brave = braveKey;
-
-  return {
+  const config = {
     user: {
       name: document.getElementById('userName').value.trim() || 'User',
       timezone: document.getElementById('userTimezone').value,
@@ -171,9 +151,29 @@ function buildConfig() {
       vibeShort: vibeData.short
     },
     skills: packs,
-    integrations,
+    integrations: {
+      telegram: document.getElementById('telegramToken').value.trim()
+    },
     workspace: '~/clawd'
   };
+
+  // Auth — API key or Claude Max token
+  if (authMode === 'api') {
+    config.integrations.anthropic = document.getElementById('anthropicKey').value.trim();
+  } else {
+    config.integrations.claudeMax = document.getElementById('claudeMaxToken').value.trim();
+  }
+
+  // Additional API keys
+  const openai = document.getElementById('openaiKey')?.value.trim();
+  const elevenlabs = document.getElementById('elevenlabsKey')?.value.trim();
+  const brave = document.getElementById('braveKey')?.value.trim();
+  
+  if (openai) config.integrations.openai = openai;
+  if (elevenlabs) config.integrations.elevenlabs = elevenlabs;
+  if (brave) config.integrations.brave = brave;
+
+  return config;
 }
 
 function generateDeploy() {
@@ -187,11 +187,6 @@ function generateDeploy() {
 
   document.getElementById('deployCommand').textContent = command;
 
-  // Re-init icons for step 5
-  if (typeof lucide !== 'undefined') {
-    lucide.createIcons();
-  }
-
   // Preview grid
   const grid = document.getElementById('previewGrid');
   const packLabels = {
@@ -199,17 +194,15 @@ function generateDeploy() {
   };
   const selectedPacks = config.skills.split(',').map(p => packLabels[p] || p).join(', ');
 
-  const authLabel = config.integrations.authMode === 'max' ? 'Claude Max' : 'API Key';
-  const authConfigured = config.integrations.authMode === 'max'
-    ? !!config.integrations.claudeMaxToken
-    : !!config.integrations.anthropic;
+  const authLabel = authMode === 'api' ? 'API Key' : 'Claude Max';
+  const authConfigured = authMode === 'api' 
+    ? config.integrations.anthropic 
+    : config.integrations.claudeMax;
 
-  // Count additional keys
-  const additionalKeys = [
-    config.integrations.openai,
-    config.integrations.elevenlabs,
-    config.integrations.brave
-  ].filter(Boolean).length;
+  const additionalKeys = ['openai', 'elevenlabs', 'brave']
+    .filter(k => config.integrations[k])
+    .map(k => k.charAt(0).toUpperCase() + k.slice(1))
+    .join(', ');
 
   grid.innerHTML = `
     <div class="preview-label">Owner</div><div class="preview-value">${config.user.name}</div>
@@ -217,9 +210,9 @@ function generateDeploy() {
     <div class="preview-label">Agent Name</div><div class="preview-value">${config.agent.name} ${config.agent.emoji}</div>
     <div class="preview-label">Personality</div><div class="preview-value">${config.agent.vibeShort}</div>
     <div class="preview-label">Skill Packs</div><div class="preview-value">Core + ${selectedPacks}</div>
-    <div class="preview-label">Auth Mode</div><div class="preview-value">${authLabel} — ${authConfigured ? '✅ Configured' : '⏭️ Skipped'}</div>
-    <div class="preview-label">Telegram</div><div class="preview-value">${config.integrations.telegram ? '✅ Configured' : '⏭️ Skipped'}</div>
-    ${additionalKeys > 0 ? `<div class="preview-label">Extra Keys</div><div class="preview-value">${additionalKeys} additional key${additionalKeys > 1 ? 's' : ''} configured</div>` : ''}
+    <div class="preview-label">Auth Mode</div><div class="preview-value">${authConfigured ? '✓ ' : '— '}${authLabel}</div>
+    ${additionalKeys ? `<div class="preview-label">Additional Keys</div><div class="preview-value">✓ ${additionalKeys}</div>` : ''}
+    <div class="preview-label">Telegram</div><div class="preview-value">${config.integrations.telegram ? '✓ Configured' : '— Skipped'}</div>
   `;
 }
 
@@ -233,15 +226,11 @@ function copyCommand() {
     const btn = document.getElementById('copyBtn');
     btn.innerHTML = '<i data-lucide="clipboard-check"></i> Copied!';
     btn.classList.add('copied');
-    if (typeof lucide !== 'undefined') {
-      lucide.createIcons();
-    }
+    if (window.lucide) lucide.createIcons();
     setTimeout(() => {
       btn.innerHTML = '<i data-lucide="clipboard"></i> Copy';
       btn.classList.remove('copied');
-      if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-      }
+      if (window.lucide) lucide.createIcons();
     }, 2000);
   });
 }
@@ -265,9 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateProgress();
 
   // Initialize Lucide icons
-  if (typeof lucide !== 'undefined') {
-    lucide.createIcons();
-  }
+  if (window.lucide) lucide.createIcons();
 
   // Enter key advances steps
   document.addEventListener('keydown', (e) => {
