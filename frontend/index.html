@@ -368,15 +368,80 @@
       <section class="wizard-step" id="step5">
         <div class="step-header">
           <h2><i data-lucide="rocket" class="step-title-icon"></i> Deploy Your Agent</h2>
-          <p>Run this command on your server to set everything up.</p>
+          <p>Choose your platform and run the command to set everything up.</p>
         </div>
 
-        <div class="deploy-card">
-          <div class="deploy-header">
-            <span class="deploy-label">Terminal</span>
-            <button class="copy-btn" onclick="copyCommand()" id="copyBtn"><i data-lucide="clipboard"></i> Copy</button>
+        <!-- OS Selector -->
+        <div class="os-selector">
+          <button class="os-tab active" data-os="linux" onclick="switchOS('linux')">
+            <i data-lucide="terminal"></i> Linux
+          </button>
+          <button class="os-tab" data-os="mac" onclick="switchOS('mac')">
+            <i data-lucide="laptop"></i> macOS
+          </button>
+          <button class="os-tab" data-os="windows" onclick="switchOS('windows')">
+            <i data-lucide="monitor"></i> Windows
+          </button>
+        </div>
+
+        <!-- Linux Panel -->
+        <div class="os-panel active" id="osLinux">
+          <div class="deploy-card">
+            <div class="deploy-header">
+              <span class="deploy-label">Terminal</span>
+              <button class="copy-btn" onclick="copyCommand('linux')" id="copyBtnLinux"><i data-lucide="clipboard"></i> Copy</button>
+            </div>
+            <pre class="deploy-command" id="deployCommandLinux">Generating...</pre>
           </div>
-          <pre class="deploy-command" id="deployCommand">Generating...</pre>
+        </div>
+
+        <!-- macOS Panel -->
+        <div class="os-panel" id="osMac">
+          <div class="os-prereq">
+            <i data-lucide="info"></i>
+            <span>Requires <a href="https://brew.sh" target="_blank">Homebrew</a> and Node.js. If you don't have them: <code>brew install node</code></span>
+          </div>
+          <div class="deploy-card">
+            <div class="deploy-header">
+              <span class="deploy-label">Terminal</span>
+              <button class="copy-btn" onclick="copyCommand('mac')" id="copyBtnMac"><i data-lucide="clipboard"></i> Copy</button>
+            </div>
+            <pre class="deploy-command" id="deployCommandMac">Generating...</pre>
+          </div>
+        </div>
+
+        <!-- Windows Panel -->
+        <div class="os-panel" id="osWindows">
+          <div class="os-prereq warning">
+            <i data-lucide="alert-triangle"></i>
+            <span>Clawdbot requires a Linux environment. On Windows, use <strong>WSL</strong> (Windows Subsystem for Linux).</span>
+          </div>
+          <div class="instructions-box">
+            <strong>Step 1 — Install WSL (one-time setup):</strong>
+            <ol>
+              <li>Open <strong>PowerShell as Administrator</strong></li>
+              <li>Run: <code>wsl --install</code></li>
+              <li>Restart your computer when prompted</li>
+              <li>Open the new <strong>Ubuntu</strong> app from Start Menu and create a username/password</li>
+            </ol>
+          </div>
+          <div class="instructions-box" style="margin-top: 12px;">
+            <strong>Step 2 — Install Node.js inside WSL:</strong>
+            <ol>
+              <li>In your Ubuntu terminal, run:</li>
+            </ol>
+            <pre class="inline-code">curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash - && sudo apt-get install -y nodejs</pre>
+          </div>
+          <div class="instructions-box" style="margin-top: 12px;">
+            <strong>Step 3 — Run the setup command:</strong>
+          </div>
+          <div class="deploy-card" style="margin-top: 12px;">
+            <div class="deploy-header">
+              <span class="deploy-label">WSL / Ubuntu Terminal</span>
+              <button class="copy-btn" onclick="copyCommand('windows')" id="copyBtnWindows"><i data-lucide="clipboard"></i> Copy</button>
+            </div>
+            <pre class="deploy-command" id="deployCommandWindows">Generating...</pre>
+          </div>
         </div>
 
         <div class="deploy-steps">

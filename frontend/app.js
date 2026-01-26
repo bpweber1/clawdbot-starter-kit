@@ -5,6 +5,7 @@
 const TOTAL_STEPS = 5;
 let currentStep = 1;
 let authMode = 'api'; // 'api' or 'max'
+let selectedOS = 'linux'; // 'linux', 'mac', or 'windows'
 
 const VIBE_MAP = {
   professional: {
@@ -122,6 +123,27 @@ function toggleAdditionalKeys() {
 }
 
 // ============================================================================
+// OS Selector
+// ============================================================================
+
+function switchOS(os) {
+  selectedOS = os;
+
+  // Toggle tab active states
+  document.querySelectorAll('.os-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.os === os);
+  });
+
+  // Toggle panel visibility
+  document.getElementById('osLinux').classList.toggle('active', os === 'linux');
+  document.getElementById('osMac').classList.toggle('active', os === 'mac');
+  document.getElementById('osWindows').classList.toggle('active', os === 'windows');
+
+  // Re-init Lucide icons
+  if (window.lucide) lucide.createIcons();
+}
+
+// ============================================================================
 // Config Generation
 // ============================================================================
 
@@ -185,7 +207,12 @@ function generateDeploy() {
 
   showStep(5);
 
-  document.getElementById('deployCommand').textContent = command;
+  // Set the same command for all OS panels (the bash command is identical)
+  const commandEls = ['deployCommandLinux', 'deployCommandMac', 'deployCommandWindows'];
+  commandEls.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = command;
+  });
 
   // Preview grid
   const grid = document.getElementById('previewGrid');
@@ -220,10 +247,13 @@ function generateDeploy() {
 // Copy & Download
 // ============================================================================
 
-function copyCommand() {
-  const text = document.getElementById('deployCommand').textContent;
+function copyCommand(os) {
+  const idMap = { linux: 'deployCommandLinux', mac: 'deployCommandMac', windows: 'deployCommandWindows' };
+  const btnMap = { linux: 'copyBtnLinux', mac: 'copyBtnMac', windows: 'copyBtnWindows' };
+  const text = document.getElementById(idMap[os || selectedOS])?.textContent || '';
   navigator.clipboard.writeText(text).then(() => {
-    const btn = document.getElementById('copyBtn');
+    const btn = document.getElementById(btnMap[os || selectedOS]);
+    if (!btn) return;
     btn.innerHTML = '<i data-lucide="clipboard-check"></i> Copied!';
     btn.classList.add('copied');
     if (window.lucide) lucide.createIcons();
