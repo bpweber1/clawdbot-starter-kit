@@ -60,6 +60,66 @@ body {
   padding: 0 24px;
 }
 
+/* ============================================================================
+   Lucide Icons — Base & Context Overrides
+   ============================================================================ */
+
+.lucide {
+  width: 1em;
+  height: 1em;
+  stroke: currentColor;
+  vertical-align: -0.125em;
+}
+
+/* Logo icon — bigger */
+.logo-icon .lucide {
+  width: 28px;
+  height: 28px;
+}
+
+/* Step title icons */
+.step-title-icon {
+  width: 0.85em;
+  height: 0.85em;
+  vertical-align: -0.1em;
+  margin-right: 4px;
+}
+
+/* Vibe card icons — bigger */
+.vibe-icon .lucide {
+  width: 28px;
+  height: 28px;
+}
+
+/* Pack card icons — bigger */
+.pack-icon .lucide {
+  width: 28px;
+  height: 28px;
+}
+
+/* Security notice icon */
+.notice-icon .lucide {
+  width: 20px;
+  height: 20px;
+}
+
+/* Button icons */
+.btn .lucide,
+.copy-btn .lucide {
+  width: 14px;
+  height: 14px;
+  vertical-align: -0.15em;
+  margin-right: 4px;
+}
+
+/* Expand button icon */
+.expand-btn .lucide {
+  width: 18px;
+  height: 18px;
+  vertical-align: -0.2em;
+  margin-right: 6px;
+}
+
 /* Header */
 .header {
   padding: 24px 0;
@@ -79,7 +139,7 @@ body {
   font-weight: 700;
   color: var(--navy);
 }
-.logo-icon { font-size: 28px; }
+.logo-icon { font-size: 28px; display: flex; align-items: center; }
 .header-brand {
   font-size: 14px;
   color: var(--text-muted);
@@ -161,6 +221,8 @@ body {
   font-weight: 700;
   margin-bottom: 8px;
   color: var(--navy);
+  display: flex;
+  align-items: center;
 }
 .step-header p { color: var(--text-muted); font-size: 15px; }
 
@@ -231,10 +293,17 @@ input::placeholder, textarea::placeholder { color: var(--text-dim); }
   box-shadow: 0 2px 4px rgba(0,0,0,0.06);
 }
 .vibe-card input:checked + .vibe-content {
-  border-color: var(--action-blue);
-  background: var(--primary-bg);
+  border-color: var(--royal-blue);
+  background: rgba(0, 94, 184, 0.06);
 }
-.vibe-icon { font-size: 28px; margin-bottom: 8px; }
+.vibe-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--royal-blue);
+}
 .vibe-label { font-weight: 600; font-size: 14px; margin-bottom: 4px; color: var(--navy); }
 .vibe-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
 
@@ -254,7 +323,7 @@ input::placeholder, textarea::placeholder { color: var(--text-dim); }
 }
 .pack-card.selectable { cursor: pointer; }
 .pack-card.selectable:hover {
-  border-color: #cbd5e1;
+  border-color: var(--royal-blue);
   box-shadow: 0 4px 6px -1px rgba(0,0,0,0.08);
 }
 .pack-card.core {
@@ -263,8 +332,8 @@ input::placeholder, textarea::placeholder { color: var(--text-dim); }
 }
 .pack-check { display: none; }
 .pack-card:has(.pack-check:checked) {
-  border-color: var(--action-blue);
-  background: var(--primary-bg);
+  border-color: var(--royal-blue);
+  background: rgba(0, 94, 184, 0.06);
 }
 .pack-header {
   display: flex;
@@ -272,7 +341,12 @@ input::placeholder, textarea::placeholder { color: var(--text-dim); }
   gap: 12px;
   margin-bottom: 12px;
 }
-.pack-icon { font-size: 28px; }
+.pack-icon {
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  color: var(--royal-blue);
+}
 .pack-title { font-weight: 700; font-size: 16px; color: var(--navy); }
 .pack-badge {
   font-size: 11px;
@@ -317,6 +391,184 @@ input::placeholder, textarea::placeholder { color: var(--text-dim); }
   accent-color: var(--action-blue);
 }
 
+/* ============================================================================
+   Auth Toggle — Claude API Key / Max Toggle
+   ============================================================================ */
+
+.auth-toggle {
+  display: inline-flex;
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 3px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+}
+
+.auth-tab {
+  padding: 8px 20px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.auth-tab:hover {
+  color: var(--text);
+}
+
+.auth-tab.active {
+  background: var(--bg-white);
+  color: var(--navy);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.auth-panel {
+  display: none;
+}
+
+.auth-panel.active {
+  display: block;
+}
+
+.auth-panel label {
+  margin-bottom: 6px;
+}
+
+.auth-panel input {
+  margin-bottom: 6px;
+}
+
+/* ============================================================================
+   Instructions Box — Step-by-step guides
+   ============================================================================ */
+
+.instructions-box {
+  margin-top: 12px;
+  padding: 16px 20px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.instructions-box strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--navy);
+  font-size: 13px;
+}
+
+.instructions-box ol {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.instructions-box ol li {
+  margin-bottom: 4px;
+  color: var(--text-muted);
+}
+
+.instructions-box ol li:last-child {
+  margin-bottom: 0;
+}
+
+.instructions-box a {
+  color: var(--royal-blue);
+  text-decoration: none;
+}
+
+.instructions-box a:hover {
+  text-decoration: underline;
+}
+
+.instructions-box code {
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--action-blue);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.instructions-box.compact {
+  margin-top: 8px;
+  padding: 12px 16px;
+  font-size: 12px;
+}
+
+.instructions-box.compact strong {
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.instructions-box.compact ol li {
+  margin-bottom: 2px;
+}
+
+/* ============================================================================
+   Additional API Keys — Expandable Section
+   ============================================================================ */
+
+.additional-keys {
+  margin-top: 4px;
+}
+
+.expand-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 18px;
+  background: transparent;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  justify-content: center;
+}
+
+.expand-btn:hover {
+  border-color: var(--royal-blue);
+  color: var(--royal-blue);
+  background: rgba(0, 94, 184, 0.04);
+}
+
+.expand-btn .hint {
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-left: 4px;
+}
+
+.additional-keys-panel {
+  margin-top: 16px;
+  padding: 20px;
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.additional-keys-panel .form-group {
+  margin: 0;
+}
+
+.additional-keys-panel .form-group input {
+  margin-bottom: 4px;
+}
+
 /* Security Notice */
 .security-notice {
   display: flex;
@@ -330,7 +582,13 @@ input::placeholder, textarea::placeholder { color: var(--text-dim); }
   font-size: 13px;
   color: var(--text-muted);
 }
-.notice-icon { font-size: 20px; flex-shrink: 0; }
+.notice-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  color: var(--royal-blue);
+}
 .security-notice strong { color: var(--navy); }
 
 /* Deploy */
@@ -355,6 +613,8 @@ input::placeholder, textarea::placeholder { color: var(--text-dim); }
   color: #94a3b8;
 }
 .copy-btn {
+  display: inline-flex;
+  align-items: center;
   background: none;
   border: 1px solid #475569;
   color: #94a3b8;
@@ -363,6 +623,7 @@ input::placeholder, textarea::placeholder { color: var(--text-dim); }
   font-size: 13px;
   cursor: pointer;
   transition: all 0.2s;
+  font-family: var(--font);
 }
 .copy-btn:hover { border-color: var(--royal-blue); color: #dbeafe; }
 .copy-btn.copied { border-color: var(--success); color: var(--success); }
@@ -422,6 +683,8 @@ input::placeholder, textarea::placeholder { color: var(--text-dim); }
   border-top: 1px solid var(--border);
 }
 .btn {
+  display: inline-flex;
+  align-items: center;
   padding: 10px 24px;
   border-radius: var(--radius-sm);
   font-size: 14px;
@@ -432,13 +695,13 @@ input::placeholder, textarea::placeholder { color: var(--text-dim); }
   border: none;
 }
 .btn-primary {
-  background: var(--action-blue);
+  background: var(--royal-blue);
   color: white;
 }
 .btn-primary:hover {
-  background: var(--primary-hover);
+  background: var(--navy);
   transform: translateY(-1px);
-  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.25);
+  box-shadow: 0 4px 12px rgba(0, 94, 184, 0.3);
 }
 .btn-secondary {
   background: transparent;
@@ -475,4 +738,6 @@ input::placeholder, textarea::placeholder { color: var(--text-dim); }
   .progress-steps .step span { width: 20px; height: 20px; font-size: 10px; }
   .step-header h2 { font-size: 22px; }
   .header-brand { display: none; }
+  .auth-toggle { width: 100%; }
+  .auth-tab { flex: 1; text-align: center; }
 }

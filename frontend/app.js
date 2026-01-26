@@ -24,6 +24,9 @@ const VIBE_MAP = {
   }
 };
 
+// Track current auth mode
+let currentAuthMode = 'api';
+
 // ============================================================================
 // Step Navigation
 // ============================================================================
@@ -85,6 +88,38 @@ function toggleAll(checkbox) {
 }
 
 // ============================================================================
+// Auth Toggle (API Key / Claude Max)
+// ============================================================================
+
+function switchAuth(mode) {
+  currentAuthMode = mode;
+
+  // Update tab active states
+  document.querySelectorAll('.auth-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.auth === mode);
+  });
+
+  // Show/hide panels
+  document.getElementById('authApi').classList.toggle('active', mode === 'api');
+  document.getElementById('authMax').classList.toggle('active', mode === 'max');
+}
+
+// ============================================================================
+// Additional API Keys Toggle
+// ============================================================================
+
+function toggleAdditionalKeys() {
+  const panel = document.getElementById('additionalKeysPanel');
+  const isHidden = panel.style.display === 'none';
+  panel.style.display = isHidden ? 'flex' : 'none';
+
+  // Re-initialize icons if panel just became visible
+  if (isHidden && typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+}
+
+// ============================================================================
 // Config Generation
 // ============================================================================
 
@@ -98,6 +133,28 @@ function buildConfig() {
   const packs = Array.from(document.querySelectorAll('input[name="packs"]:checked'))
     .map(cb => cb.value)
     .join(',') || 'C';
+
+  // Build integrations based on auth mode
+  const integrations = {
+    telegram: document.getElementById('telegramToken').value.trim()
+  };
+
+  if (currentAuthMode === 'api') {
+    integrations.anthropic = document.getElementById('anthropicKey').value.trim();
+    integrations.authMode = 'api';
+  } else {
+    integrations.claudeMaxToken = document.getElementById('claudeMaxToken').value.trim();
+    integrations.authMode = 'max';
+  }
+
+  // Additional keys
+  const openaiKey = document.getElementById('openaiKey').value.trim();
+  const elevenlabsKey = document.getElementById('elevenlabsKey').value.trim();
+  const braveKey = document.getElementById('braveKey').value.trim();
+
+  if (openaiKey) integrations.openai = openaiKey;
+  if (elevenlabsKey) integrations.elevenlabs = elevenlabsKey;
+  if (braveKey) integrations.brave = braveKey;
 
   return {
     user: {
@@ -114,10 +171,7 @@ function buildConfig() {
       vibeShort: vibeData.short
     },
     skills: packs,
-    integrations: {
-      telegram: document.getElementById('telegramToken').value.trim(),
-      anthropic: document.getElementById('anthropicKey').value.trim()
-    },
+    integrations,
     workspace: '~/clawd'
   };
 }
@@ -133,6 +187,11 @@ function generateDeploy() {
 
   document.getElementById('deployCommand').textContent = command;
 
+  // Re-init icons for step 5
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+
   // Preview grid
   const grid = document.getElementById('previewGrid');
   const packLabels = {
@@ -140,14 +199,27 @@ function generateDeploy() {
   };
   const selectedPacks = config.skills.split(',').map(p => packLabels[p] || p).join(', ');
 
+  const authLabel = config.integrations.authMode === 'max' ? 'Claude Max' : 'API Key';
+  const authConfigured = config.integrations.authMode === 'max'
+    ? !!config.integrations.claudeMaxToken
+    : !!config.integrations.anthropic;
+
+  // Count additional keys
+  const additionalKeys = [
+    config.integrations.openai,
+    config.integrations.elevenlabs,
+    config.integrations.brave
+  ].filter(Boolean).length;
+
   grid.innerHTML = `
     <div class="preview-label">Owner</div><div class="preview-value">${config.user.name}</div>
     <div class="preview-label">Timezone</div><div class="preview-value">${config.user.timezone}</div>
     <div class="preview-label">Agent Name</div><div class="preview-value">${config.agent.name} ${config.agent.emoji}</div>
     <div class="preview-label">Personality</div><div class="preview-value">${config.agent.vibeShort}</div>
     <div class="preview-label">Skill Packs</div><div class="preview-value">Core + ${selectedPacks}</div>
+    <div class="preview-label">Auth Mode</div><div class="preview-value">${authLabel} — ${authConfigured ? '✅ Configured' : '⏭️ Skipped'}</div>
     <div class="preview-label">Telegram</div><div class="preview-value">${config.integrations.telegram ? '✅ Configured' : '⏭️ Skipped'}</div>
-    <div class="preview-label">Anthropic</div><div class="preview-value">${config.integrations.anthropic ? '✅ Configured' : '⏭️ Skipped'}</div>
+    ${additionalKeys > 0 ? `<div class="preview-label">Extra Keys</div><div class="preview-value">${additionalKeys} additional key${additionalKeys > 1 ? 's' : ''} configured</div>` : ''}
   `;
 }
 
@@ -159,11 +231,17 @@ function copyCommand() {
   const text = document.getElementById('deployCommand').textContent;
   navigator.clipboard.writeText(text).then(() => {
     const btn = document.getElementById('copyBtn');
-    btn.textContent = '✅ Copied!';
+    btn.innerHTML = '<i data-lucide="clipboard-check"></i> Copied!';
     btn.classList.add('copied');
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
     setTimeout(() => {
-      btn.textContent = '📋 Copy';
+      btn.innerHTML = '<i data-lucide="clipboard"></i> Copy';
       btn.classList.remove('copied');
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
     }, 2000);
   });
 }
@@ -185,6 +263,11 @@ function downloadConfig() {
 
 document.addEventListener('DOMContentLoaded', () => {
   updateProgress();
+
+  // Initialize Lucide icons
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
 
   // Enter key advances steps
   document.addEventListener('keydown', (e) => {

@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body>
   <div class="app">
@@ -14,7 +15,7 @@
     <header class="header">
       <div class="header-inner">
         <div class="logo">
-          <span class="logo-icon">🤖</span>
+          <span class="logo-icon"><i data-lucide="bot"></i></span>
           <span class="logo-text">Clawdbot Starter Kit</span>
         </div>
         <div class="header-brand">
@@ -44,13 +45,13 @@
       <!-- Step 1: About You -->
       <section class="wizard-step active" id="step1">
         <div class="step-header">
-          <h2>About You</h2>
+          <h2><i data-lucide="user" class="step-title-icon"></i> About You</h2>
           <p>Tell us about yourself so your AI assistant can be personalized.</p>
         </div>
         <div class="form-grid">
           <div class="form-group">
             <label for="userName">Your Name <span class="required">*</span></label>
-            <input type="text" id="userName" placeholder="Brad Weber" required>
+            <input type="text" id="userName" placeholder="Jane Smith" required>
           </div>
           <div class="form-group">
             <label for="userTimezone">Timezone</label>
@@ -89,7 +90,7 @@
       <!-- Step 2: Your Agent -->
       <section class="wizard-step" id="step2">
         <div class="step-header">
-          <h2>Your AI Agent</h2>
+          <h2><i data-lucide="cpu" class="step-title-icon"></i> Your AI Agent</h2>
           <p>Design your agent's personality and identity.</p>
         </div>
         <div class="form-grid">
@@ -107,7 +108,7 @@
               <label class="vibe-card">
                 <input type="radio" name="agentVibe" value="professional" checked>
                 <div class="vibe-content">
-                  <div class="vibe-icon">💼</div>
+                  <div class="vibe-icon"><i data-lucide="briefcase"></i></div>
                   <div class="vibe-label">Professional</div>
                   <div class="vibe-desc">Precise, thorough, formal but approachable</div>
                 </div>
@@ -115,7 +116,7 @@
               <label class="vibe-card">
                 <input type="radio" name="agentVibe" value="casual">
                 <div class="vibe-content">
-                  <div class="vibe-icon">😊</div>
+                  <div class="vibe-icon"><i data-lucide="smile"></i></div>
                   <div class="vibe-label">Casual</div>
                   <div class="vibe-desc">Warm, friendly, like a smart friend</div>
                 </div>
@@ -123,7 +124,7 @@
               <label class="vibe-card">
                 <input type="radio" name="agentVibe" value="technical">
                 <div class="vibe-content">
-                  <div class="vibe-icon">⚡</div>
+                  <div class="vibe-icon"><i data-lucide="zap"></i></div>
                   <div class="vibe-label">Technical</div>
                   <div class="vibe-desc">Direct, efficient, code > words</div>
                 </div>
@@ -131,7 +132,7 @@
               <label class="vibe-card">
                 <input type="radio" name="agentVibe" value="creative">
                 <div class="vibe-content">
-                  <div class="vibe-icon">🎨</div>
+                  <div class="vibe-icon"><i data-lucide="palette"></i></div>
                   <div class="vibe-label">Creative</div>
                   <div class="vibe-desc">Energetic, fresh ideas, enthusiastic</div>
                 </div>
@@ -152,7 +153,7 @@
       <!-- Step 3: Skill Packs -->
       <section class="wizard-step" id="step3">
         <div class="step-header">
-          <h2>Skill Packs</h2>
+          <h2><i data-lucide="package" class="step-title-icon"></i> Skill Packs</h2>
           <p>Choose the capabilities your agent will have from day one.</p>
         </div>
 
@@ -160,7 +161,7 @@
           <!-- Core (always on) -->
           <div class="pack-card core">
             <div class="pack-header">
-              <div class="pack-icon">🛡️</div>
+              <div class="pack-icon"><i data-lucide="shield-check"></i></div>
               <div>
                 <div class="pack-title">Core</div>
                 <div class="pack-badge always">Always Included</div>
@@ -178,7 +179,7 @@
           <label class="pack-card selectable">
             <input type="checkbox" name="packs" value="M" class="pack-check">
             <div class="pack-header">
-              <div class="pack-icon">📈</div>
+              <div class="pack-icon"><i data-lucide="trending-up"></i></div>
               <div>
                 <div class="pack-title">Marketing</div>
                 <div class="pack-count">23 skills</div>
@@ -199,7 +200,7 @@
           <label class="pack-card selectable">
             <input type="checkbox" name="packs" value="D" class="pack-check">
             <div class="pack-header">
-              <div class="pack-icon">💻</div>
+              <div class="pack-icon"><i data-lucide="code-2"></i></div>
               <div>
                 <div class="pack-title">Developer</div>
                 <div class="pack-count">5 skills</div>
@@ -219,7 +220,7 @@
           <label class="pack-card selectable">
             <input type="checkbox" name="packs" value="O" class="pack-check">
             <div class="pack-header">
-              <div class="pack-icon">⚙️</div>
+              <div class="pack-icon"><i data-lucide="settings"></i></div>
               <div>
                 <div class="pack-title">Operations</div>
                 <div class="pack-count">2 skills</div>
@@ -236,7 +237,7 @@
           <label class="pack-card selectable">
             <input type="checkbox" name="packs" value="W" class="pack-check">
             <div class="pack-header">
-              <div class="pack-icon">🎬</div>
+              <div class="pack-icon"><i data-lucide="film"></i></div>
               <div>
                 <div class="pack-title">Media</div>
                 <div class="pack-count">5 skills</div>
@@ -269,28 +270,88 @@
       <!-- Step 4: Integrations -->
       <section class="wizard-step" id="step4">
         <div class="step-header">
-          <h2>Integrations</h2>
+          <h2><i data-lucide="plug" class="step-title-icon"></i> Integrations</h2>
           <p>Connect your agent to services. All fields optional — you can set these up later.</p>
         </div>
         <div class="form-grid">
+          <!-- Claude Auth Toggle -->
           <div class="form-group full-width">
-            <label for="anthropicKey">Anthropic API Key</label>
-            <div class="input-with-hint">
-              <input type="password" id="anthropicKey" placeholder="sk-ant-...">
-              <span class="field-hint">Required to run. Get one at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></span>
+            <label>Claude Authentication</label>
+            <div class="auth-toggle">
+              <button class="auth-tab active" data-auth="api" onclick="switchAuth('api')">API Key</button>
+              <button class="auth-tab" data-auth="max" onclick="switchAuth('max')">Claude Max</button>
+            </div>
+
+            <!-- API Key panel -->
+            <div class="auth-panel active" id="authApi">
+              <label for="anthropicKey">Anthropic API Key</label>
+              <input type="password" id="anthropicKey" placeholder="sk-ant-api03-...">
+              <span class="field-hint">Get one at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> → API Keys</span>
+            </div>
+
+            <!-- Claude Max panel -->
+            <div class="auth-panel" id="authMax">
+              <label for="claudeMaxToken">Claude Max Session Token</label>
+              <input type="password" id="claudeMaxToken" placeholder="sk-ant-sid01-...">
+              <div class="instructions-box">
+                <strong>How to get your Claude Max token:</strong>
+                <ol>
+                  <li>Log into <a href="https://claude.ai" target="_blank">claude.ai</a></li>
+                  <li>Open browser DevTools (F12 or Cmd+Opt+I)</li>
+                  <li>Go to Application → Cookies → claude.ai</li>
+                  <li>Find the cookie named <code>sessionKey</code></li>
+                  <li>Copy its value — that's your token</li>
+                </ol>
+              </div>
             </div>
           </div>
+
+          <!-- Additional API Keys -->
+          <div class="form-group full-width">
+            <div class="additional-keys">
+              <button class="expand-btn" onclick="toggleAdditionalKeys()">
+                <i data-lucide="plus-circle"></i> Additional API Keys <span class="hint">(optional)</span>
+              </button>
+              <div class="additional-keys-panel" id="additionalKeysPanel" style="display:none">
+                <div class="form-group">
+                  <label>OpenAI API Key</label>
+                  <input type="password" id="openaiKey" placeholder="sk-...">
+                  <span class="field-hint">For GPT models. Get at <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com</a></span>
+                </div>
+                <div class="form-group">
+                  <label>ElevenLabs API Key</label>
+                  <input type="password" id="elevenlabsKey" placeholder="xi-...">
+                  <span class="field-hint">For TTS voices. Get at <a href="https://elevenlabs.io" target="_blank">elevenlabs.io</a> → Profile → API Key</span>
+                </div>
+                <div class="form-group">
+                  <label>Brave Search API Key</label>
+                  <input type="password" id="braveKey" placeholder="BSA...">
+                  <span class="field-hint">For web search. Get at <a href="https://brave.com/search/api/" target="_blank">brave.com/search/api</a></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Telegram Bot Token -->
           <div class="form-group full-width">
             <label for="telegramToken">Telegram Bot Token</label>
             <div class="input-with-hint">
-              <input type="text" id="telegramToken" placeholder="123456:ABC-DEF1234...">
-              <span class="field-hint">Create via <a href="https://t.me/BotFather" target="_blank">@BotFather</a> on Telegram</span>
+              <input type="text" id="telegramToken" placeholder="123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11">
+              <div class="instructions-box compact">
+                <strong>How to create a Telegram bot:</strong>
+                <ol>
+                  <li>Open Telegram and search for <a href="https://t.me/BotFather" target="_blank">@BotFather</a></li>
+                  <li>Send <code>/newbot</code> and follow the prompts</li>
+                  <li>Choose a name (e.g., "My AI Assistant") and username (must end in "bot")</li>
+                  <li>BotFather will give you a token — paste it above</li>
+                </ol>
+              </div>
             </div>
           </div>
         </div>
 
         <div class="security-notice">
-          <div class="notice-icon">🔒</div>
+          <div class="notice-icon"><i data-lucide="lock"></i></div>
           <div>
             <strong>Your keys never leave your browser.</strong>
             They're encoded into the install command and sent directly to your server. We don't store anything.
@@ -306,14 +367,14 @@
       <!-- Step 5: Deploy -->
       <section class="wizard-step" id="step5">
         <div class="step-header">
-          <h2>Deploy Your Agent</h2>
+          <h2><i data-lucide="rocket" class="step-title-icon"></i> Deploy Your Agent</h2>
           <p>Run this command on your server to set everything up.</p>
         </div>
 
         <div class="deploy-card">
           <div class="deploy-header">
             <span class="deploy-label">Terminal</span>
-            <button class="copy-btn" onclick="copyCommand()" id="copyBtn">📋 Copy</button>
+            <button class="copy-btn" onclick="copyCommand()" id="copyBtn"><i data-lucide="clipboard"></i> Copy</button>
           </div>
           <pre class="deploy-command" id="deployCommand">Generating...</pre>
         </div>
@@ -337,7 +398,7 @@
 
         <div class="step-actions">
           <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
-          <button class="btn btn-outline" onclick="downloadConfig()">📥 Download Config</button>
+          <button class="btn btn-outline" onclick="downloadConfig()"><i data-lucide="download"></i> Download Config</button>
         </div>
       </section>
 
