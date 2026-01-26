@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clawdbot Starter Kit — The AI Integration Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-inner">
+        <div class="logo">
+          <span class="logo-icon">🤖</span>
+          <span class="logo-text">Clawdbot Starter Kit</span>
+        </div>
+        <div class="header-brand">
+          <span>by</span>
+          <a href="https://theaiintegrationhub.com" target="_blank">The AI Integration Hub</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="progress-steps">
+        <div class="step active" data-step="1"><span>1</span> About You</div>
+        <div class="step" data-step="2"><span>2</span> Your Agent</div>
+        <div class="step" data-step="3"><span>3</span> Skill Packs</div>
+        <div class="step" data-step="4"><span>4</span> Integrations</div>
+        <div class="step" data-step="5"><span>5</span> Deploy</div>
+      </div>
+    </div>
+
+    <!-- Wizard Container -->
+    <main class="wizard">
+
+      <!-- Step 1: About You -->
+      <section class="wizard-step active" id="step1">
+        <div class="step-header">
+          <h2>About You</h2>
+          <p>Tell us about yourself so your AI assistant can be personalized.</p>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="userName">Your Name <span class="required">*</span></label>
+            <input type="text" id="userName" placeholder="Brad Weber" required>
+          </div>
+          <div class="form-group">
+            <label for="userTimezone">Timezone</label>
+            <select id="userTimezone">
+              <option value="EST">Eastern (EST/EDT)</option>
+              <option value="CST">Central (CST/CDT)</option>
+              <option value="MST">Mountain (MST/MDT)</option>
+              <option value="PST">Pacific (PST/PDT)</option>
+              <option value="UTC">UTC</option>
+              <option value="GMT">GMT (London)</option>
+              <option value="CET">CET (Berlin/Paris)</option>
+              <option value="IST">IST (India)</option>
+              <option value="JST">JST (Tokyo)</option>
+              <option value="AEST">AEST (Sydney)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="userRole">Your Role</label>
+            <input type="text" id="userRole" placeholder="CEO, Developer, Marketer...">
+          </div>
+          <div class="form-group">
+            <label for="userFocus">Focus Area</label>
+            <input type="text" id="userFocus" placeholder="Enterprise AI, SaaS, E-commerce...">
+          </div>
+          <div class="form-group full-width">
+            <label for="userStyle">Working Style <span class="hint">(How do you prefer to work?)</span></label>
+            <textarea id="userStyle" rows="3" placeholder="I like quick, efficient communication. I value proactive suggestions and data-driven decisions..."></textarea>
+          </div>
+        </div>
+        <div class="step-actions">
+          <div></div>
+          <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
+        </div>
+      </section>
+
+      <!-- Step 2: Your Agent -->
+      <section class="wizard-step" id="step2">
+        <div class="step-header">
+          <h2>Your AI Agent</h2>
+          <p>Design your agent's personality and identity.</p>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="agentName">Agent Name <span class="required">*</span></label>
+            <input type="text" id="agentName" placeholder="Jarvis, Atlas, Nova...">
+          </div>
+          <div class="form-group">
+            <label for="agentEmoji">Signature Emoji</label>
+            <input type="text" id="agentEmoji" placeholder="🤖" maxlength="4" class="emoji-input">
+          </div>
+          <div class="form-group full-width">
+            <label>Personality</label>
+            <div class="vibe-grid">
+              <label class="vibe-card">
+                <input type="radio" name="agentVibe" value="professional" checked>
+                <div class="vibe-content">
+                  <div class="vibe-icon">💼</div>
+                  <div class="vibe-label">Professional</div>
+                  <div class="vibe-desc">Precise, thorough, formal but approachable</div>
+                </div>
+              </label>
+              <label class="vibe-card">
+                <input type="radio" name="agentVibe" value="casual">
+                <div class="vibe-content">
+                  <div class="vibe-icon">😊</div>
+                  <div class="vibe-label">Casual</div>
+                  <div class="vibe-desc">Warm, friendly, like a smart friend</div>
+                </div>
+              </label>
+              <label class="vibe-card">
+                <input type="radio" name="agentVibe" value="technical">
+                <div class="vibe-content">
+                  <div class="vibe-icon">⚡</div>
+                  <div class="vibe-label">Technical</div>
+                  <div class="vibe-desc">Direct, efficient, code > words</div>
+                </div>
+              </label>
+              <label class="vibe-card">
+                <input type="radio" name="agentVibe" value="creative">
+                <div class="vibe-content">
+                  <div class="vibe-icon">🎨</div>
+                  <div class="vibe-label">Creative</div>
+                  <div class="vibe-desc">Energetic, fresh ideas, enthusiastic</div>
+                </div>
+              </label>
+            </div>
+          </div>
+          <div class="form-group full-width">
+            <label for="agentVibeCustom">Custom Personality <span class="hint">(optional override)</span></label>
+            <textarea id="agentVibeCustom" rows="2" placeholder="Or describe your own style..."></textarea>
+          </div>
+        </div>
+        <div class="step-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
+        </div>
+      </section>
+
+      <!-- Step 3: Skill Packs -->
+      <section class="wizard-step" id="step3">
+        <div class="step-header">
+          <h2>Skill Packs</h2>
+          <p>Choose the capabilities your agent will have from day one.</p>
+        </div>
+
+        <div class="packs-grid">
+          <!-- Core (always on) -->
+          <div class="pack-card core">
+            <div class="pack-header">
+              <div class="pack-icon">🛡️</div>
+              <div>
+                <div class="pack-title">Core</div>
+                <div class="pack-badge always">Always Included</div>
+              </div>
+            </div>
+            <div class="pack-skills">
+              <span class="skill-tag">security-guardrails</span>
+              <span class="skill-tag">delegation</span>
+              <span class="skill-tag">memory-architecture</span>
+            </div>
+            <p class="pack-desc">Security hardening, multi-agent orchestration, and memory patterns.</p>
+          </div>
+
+          <!-- Marketing -->
+          <label class="pack-card selectable">
+            <input type="checkbox" name="packs" value="M" class="pack-check">
+            <div class="pack-header">
+              <div class="pack-icon">📈</div>
+              <div>
+                <div class="pack-title">Marketing</div>
+                <div class="pack-count">23 skills</div>
+              </div>
+            </div>
+            <div class="pack-skills">
+              <span class="skill-tag">copywriting</span>
+              <span class="skill-tag">page-cro</span>
+              <span class="skill-tag">seo-audit</span>
+              <span class="skill-tag">email-sequence</span>
+              <span class="skill-tag">pricing-strategy</span>
+              <span class="skill-tag">+18 more</span>
+            </div>
+            <p class="pack-desc">Full marketing suite: CRO, copywriting, SEO, analytics, launch strategy, and more.</p>
+          </label>
+
+          <!-- Developer -->
+          <label class="pack-card selectable">
+            <input type="checkbox" name="packs" value="D" class="pack-check">
+            <div class="pack-header">
+              <div class="pack-icon">💻</div>
+              <div>
+                <div class="pack-title">Developer</div>
+                <div class="pack-count">5 skills</div>
+              </div>
+            </div>
+            <div class="pack-skills">
+              <span class="skill-tag">coding-agent</span>
+              <span class="skill-tag">deploy-agent</span>
+              <span class="skill-tag">read-github</span>
+              <span class="skill-tag">deepwiki</span>
+              <span class="skill-tag">clawddocs</span>
+            </div>
+            <p class="pack-desc">Code generation, deployment pipelines, GitHub integration, documentation.</p>
+          </label>
+
+          <!-- Operations -->
+          <label class="pack-card selectable">
+            <input type="checkbox" name="packs" value="O" class="pack-check">
+            <div class="pack-header">
+              <div class="pack-icon">⚙️</div>
+              <div>
+                <div class="pack-title">Operations</div>
+                <div class="pack-count">2 skills</div>
+              </div>
+            </div>
+            <div class="pack-skills">
+              <span class="skill-tag">caldav-calendar</span>
+              <span class="skill-tag">n8n-workflow-automation</span>
+            </div>
+            <p class="pack-desc">Calendar sync, workflow automation, and operational tooling.</p>
+          </label>
+
+          <!-- Media -->
+          <label class="pack-card selectable">
+            <input type="checkbox" name="packs" value="W" class="pack-check">
+            <div class="pack-header">
+              <div class="pack-icon">🎬</div>
+              <div>
+                <div class="pack-title">Media</div>
+                <div class="pack-count">5 skills</div>
+              </div>
+            </div>
+            <div class="pack-skills">
+              <span class="skill-tag">elevenlabs-voices</span>
+              <span class="skill-tag">vap-media</span>
+              <span class="skill-tag">remotion-server</span>
+              <span class="skill-tag">remotion-best-practices</span>
+              <span class="skill-tag">sag</span>
+            </div>
+            <p class="pack-desc">Text-to-speech (18 voices), AI image/video/music, programmatic video.</p>
+          </label>
+        </div>
+
+        <div class="select-all-row">
+          <label class="select-all">
+            <input type="checkbox" id="selectAll" onchange="toggleAll(this)">
+            <span>Select All Packs</span>
+          </label>
+        </div>
+
+        <div class="step-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
+        </div>
+      </section>
+
+      <!-- Step 4: Integrations -->
+      <section class="wizard-step" id="step4">
+        <div class="step-header">
+          <h2>Integrations</h2>
+          <p>Connect your agent to services. All fields optional — you can set these up later.</p>
+        </div>
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="anthropicKey">Anthropic API Key</label>
+            <div class="input-with-hint">
+              <input type="password" id="anthropicKey" placeholder="sk-ant-...">
+              <span class="field-hint">Required to run. Get one at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></span>
+            </div>
+          </div>
+          <div class="form-group full-width">
+            <label for="telegramToken">Telegram Bot Token</label>
+            <div class="input-with-hint">
+              <input type="text" id="telegramToken" placeholder="123456:ABC-DEF1234...">
+              <span class="field-hint">Create via <a href="https://t.me/BotFather" target="_blank">@BotFather</a> on Telegram</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="security-notice">
+          <div class="notice-icon">🔒</div>
+          <div>
+            <strong>Your keys never leave your browser.</strong>
+            They're encoded into the install command and sent directly to your server. We don't store anything.
+          </div>
+        </div>
+
+        <div class="step-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-primary" onclick="generateDeploy()">Generate Deploy Command →</button>
+        </div>
+      </section>
+
+      <!-- Step 5: Deploy -->
+      <section class="wizard-step" id="step5">
+        <div class="step-header">
+          <h2>Deploy Your Agent</h2>
+          <p>Run this command on your server to set everything up.</p>
+        </div>
+
+        <div class="deploy-card">
+          <div class="deploy-header">
+            <span class="deploy-label">Terminal</span>
+            <button class="copy-btn" onclick="copyCommand()" id="copyBtn">📋 Copy</button>
+          </div>
+          <pre class="deploy-command" id="deployCommand">Generating...</pre>
+        </div>
+
+        <div class="deploy-steps">
+          <h3>What happens when you run this:</h3>
+          <ol>
+            <li><strong>Prerequisites check</strong> — Verifies Node.js, npm, git are installed</li>
+            <li><strong>Installs Clawdbot</strong> — If not already installed</li>
+            <li><strong>Creates workspace</strong> — Sets up directory structure with your personalized files</li>
+            <li><strong>Installs skills</strong> — Downloads selected skill packs from ClawdHub</li>
+            <li><strong>Configures security</strong> — Locks gateway to loopback, enables token auth, installs ACIP</li>
+            <li><strong>First boot</strong> — Your agent introduces itself and is ready to go</li>
+          </ol>
+        </div>
+
+        <div class="deploy-preview">
+          <h3>Configuration Preview</h3>
+          <div class="preview-grid" id="previewGrid"></div>
+        </div>
+
+        <div class="step-actions">
+          <button class="btn btn-secondary" onclick="prevStep()">← Back</button>
+          <button class="btn btn-outline" onclick="downloadConfig()">📥 Download Config</button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Powered by <a href="https://github.com/clawdbot/clawdbot" target="_blank">Clawdbot</a> · Built by <a href="https://theaiintegrationhub.com" target="_blank">The AI Integration Hub</a></p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
