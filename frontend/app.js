@@ -202,7 +202,7 @@ function generateDeploy() {
   const config = buildConfig();
   const configB64 = btoa(unescape(encodeURIComponent(JSON.stringify(config))));
 
-  const command = `curl -fsSL https://raw.githubusercontent.com/theaiintegrationhub/clawdbot-starter-kit/main/installer/setup.sh -o /tmp/setup.sh && \\
+  const command = `curl -fsSL https://raw.githubusercontent.com/bpweber1/clawdbot-starter-kit/main/installer/setup.sh -o /tmp/setup.sh && \\
   bash /tmp/setup.sh --config ${configB64}`;
 
   showStep(5);
