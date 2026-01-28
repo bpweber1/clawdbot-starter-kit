@@ -684,6 +684,19 @@ TELEOF
 $auth_block
   },
   "agents": {
+    "defaults": {
+      "compaction": {
+        "memoryFlush": {
+          "enabled": true
+        }
+      },
+      "memorySearch": {
+        "experimental": {
+          "sessionMemory": true
+        },
+        "sources": ["memory", "sessions"]
+      }
+    },
     "main": {
       "model": "anthropic/claude-sonnet-4-20250514",
       "workspace": "$dir"
