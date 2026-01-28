@@ -185,6 +185,8 @@ interactive_setup() {
   echo "    ${BOLD}[D]${NC} Developer (5 skills)"
   echo "    ${BOLD}[O]${NC} Operations (2 skills)"
   echo "    ${BOLD}[W]${NC} Media (5 skills)"
+  echo "    ${BOLD}[R]${NC} Research (3 skills) — QMD, last30days, Crabwalk"
+  echo "    ${BOLD}[V]${NC} Voice (1 skill) — PersonaPlex full-duplex AI"
   echo "    ${BOLD}[A]${NC} All of the above"
   echo ""
   ask "Enter choices (e.g. M,D or A for all)"
@@ -556,6 +558,30 @@ install_skills() {
   if [[ "$choices" == *"W"* ]] || [[ "$choices" == *"A"* ]]; then
     info "Installing Media pack..."
     for skill in elevenlabs-voices vap-media remotion-server remotion-best-practices sag; do
+      if [[ -d "$skills_dir/$skill" ]]; then
+        log "$skill (already installed)"
+      else
+        install_skill "$skill" "$skills_dir"
+      fi
+    done
+  fi
+
+  # Research
+  if [[ "$choices" == *"R"* ]] || [[ "$choices" == *"A"* ]]; then
+    info "Installing Research pack..."
+    for skill in qmd last30days crabwalk; do
+      if [[ -d "$skills_dir/$skill" ]]; then
+        log "$skill (already installed)"
+      else
+        install_skill "$skill" "$skills_dir"
+      fi
+    done
+  fi
+
+  # Voice
+  if [[ "$choices" == *"V"* ]] || [[ "$choices" == *"A"* ]]; then
+    info "Installing Voice pack..."
+    for skill in personaplex; do
       if [[ -d "$skills_dir/$skill" ]]; then
         log "$skill (already installed)"
       else

@@ -217,7 +217,7 @@ function generateDeploy() {
   // Preview grid
   const grid = document.getElementById('previewGrid');
   const packLabels = {
-    'M': 'Marketing', 'D': 'Developer', 'O': 'Operations', 'W': 'Media', 'C': 'Core'
+    'M': 'Marketing', 'D': 'Developer', 'O': 'Operations', 'W': 'Media', 'R': 'Research', 'V': 'Voice', 'C': 'Core'
   };
   const selectedPacks = config.skills.split(',').map(p => packLabels[p] || p).join(', ');
 
