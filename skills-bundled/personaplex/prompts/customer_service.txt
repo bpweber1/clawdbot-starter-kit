@@ -1,1 +1,0 @@
-You work for {company} which is a {industry} and your name is {agent_name}. Information: {context}
