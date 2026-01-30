@@ -199,18 +199,27 @@ interactive_setup() {
   read -r TELEGRAM_TOKEN
   echo ""
   echo "  Authentication mode:"
-  echo "    1) Anthropic API Key"
-  echo "    2) Claude Max session token"
-  ask "Choose (1-2)"
+  echo "    1) Anthropic API Key (pay-as-you-go)"
+  echo "    2) Claude Max/Pro OAuth (opens browser - uses your subscription)"
+  echo "    3) Claude Max session token (manual paste)"
+  ask "Choose (1-3)"
   read -r AUTH_CHOICE
   if [[ "$AUTH_CHOICE" == "2" ]]; then
+    # OAuth - will be handled after Clawdbot install
+    ANTHROPIC_KEY=""
+    CLAUDE_MAX_TOKEN=""
+    USE_OAUTH="true"
+    info "OAuth selected — browser will open after setup to authenticate"
+  elif [[ "$AUTH_CHOICE" == "3" ]]; then
     ask "Claude Max session token"
     read -r CLAUDE_MAX_TOKEN
     ANTHROPIC_KEY=""
+    USE_OAUTH=""
   else
     ask "Anthropic API key"
     read -r ANTHROPIC_KEY
     CLAUDE_MAX_TOKEN=""
+    USE_OAUTH=""
   fi
   echo ""
 
@@ -240,7 +249,8 @@ interactive_setup() {
   "integrations": {
     "telegram": "$TELEGRAM_TOKEN",
     "anthropic": "$ANTHROPIC_KEY",
-    "claudeMax": "$CLAUDE_MAX_TOKEN"
+    "claudeMax": "$CLAUDE_MAX_TOKEN",
+    "useOAuth": "$USE_OAUTH"
   },
   "workspace": "$WORKSPACE_DIR"
 }
@@ -638,6 +648,8 @@ configure_clawdbot() {
 
   # Determine auth config
   local auth_block=""
+  local use_oauth=$(get_val "['integrations','useOAuth']" "")
+  
   if [[ -n "$anthropic_key" ]]; then
     auth_block=$(cat <<AUTHEOF
     "anthropic:default": {
@@ -656,6 +668,10 @@ AUTHEOF
 AUTHEOF
 )
     log "Auth: Claude Max token configured"
+  elif [[ "$use_oauth" == "true" ]]; then
+    # OAuth will be configured after setup
+    auth_block=""
+    info "Auth: OAuth will be configured after setup"
   else
     warn "No authentication configured. You'll need to set this up manually."
     warn "Run: clawdbot init"
@@ -875,6 +891,42 @@ smoke_test() {
 }
 
 # ============================================================================
+# OAuth setup (Claude Max/Pro)
+# ============================================================================
+
+setup_oauth() {
+  local use_oauth=$(get_val "['integrations','useOAuth']" "")
+  
+  if [[ "$use_oauth" != "true" ]]; then
+    return
+  fi
+  
+  SETUP_STEP="oauth"
+  echo ""
+  echo -e "${BOLD}━━━ Claude Max/Pro OAuth ━━━${NC}"
+  echo ""
+  info "Opening browser for Anthropic OAuth..."
+  info "Log in with your Claude Max/Pro account."
+  echo ""
+  
+  if ! command -v clawdbot &>/dev/null; then
+    err "Clawdbot not found. OAuth setup skipped."
+    warn "Run manually later: clawdbot models auth login --provider anthropic"
+    return
+  fi
+  
+  # Run OAuth flow
+  if clawdbot models auth login --provider anthropic 2>> "$LOG_FILE"; then
+    log "OAuth authentication successful!"
+  else
+    warn "OAuth setup failed or was cancelled."
+    warn "Run manually: clawdbot models auth login --provider anthropic"
+  fi
+  
+  echo ""
+}
+
+# ============================================================================
 # Final commit & summary
 # ============================================================================
 
@@ -953,6 +1005,7 @@ main() {
   install_templates "$WORKSPACE_DIR"
   install_skills "$WORKSPACE_DIR"
   configure_clawdbot "$WORKSPACE_DIR"
+  setup_oauth
   harden_security "$WORKSPACE_DIR"
   smoke_test "$WORKSPACE_DIR"
   finalize "$WORKSPACE_DIR"
